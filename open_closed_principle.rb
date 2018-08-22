@@ -27,7 +27,6 @@ end
 # Good example
 
 class Developer < ProjectTeam
-  include TestBase
   attr_accessor :programming_language
 
   def initialize(programming_language)
@@ -41,7 +40,16 @@ class Developer < ProjectTeam
   end
 end
 
-module TestBase
+class SeniorDeveloper < Developer
+  include WritingTests
+
+  def initialize(language)
+    super
+  end
+
+end
+
+module WritingTests
   def write_unit_tests
     # Implementation for unit tests writing
   end
@@ -55,6 +63,6 @@ module TestBase
   end
 end
 
-ruby_developer = Developer.new('Ruby')
+ruby_developer = SeniorDeveloper.new('Ruby')
 ruby_developer.develop
 ruby_developer.write_unit_tests

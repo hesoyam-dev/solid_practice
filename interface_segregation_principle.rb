@@ -18,24 +18,40 @@ end
 
 # Good example
 
-class DeliveryManager
+module DMTeam
   def prepare_release(version)
     "Release #{version}"
   end
 end
 
-class ProjectA
-  PROJECT_VERSION = '0.1.0'.freeze
-
-  def release
-    @dm.prepare_release(PROJECT_VERSION)
+module Deploy
+  def prepare_deploy(version)
+    "Deploying #{version}"
   end
 end
 
-class ProjectB
+module QA
+  def finish_testing(version)
+    "Finishing test #{version}"
+  end
+end
+
+class ProjectA < DeveloperTeam
+  include Deploy
+  PROJECT_VERSION = '0.1.0'.freeze
+
+  def workload
+    prepare_deploy(PROJECT_VERSION)
+  end
+end
+
+class ProjectB < ReleaseTeam
+  include QA
+  include DMTeam
   PROJECT_VERSION = '0.1.2'.freeze
 
-  def release
-    @dm.prepare_release(PROJECT_VERSION)
+  def workload
+    finish_testing(PROJECT_VERSION)
+    prepare_release(PROJECT_VERSION)
   end
 end
